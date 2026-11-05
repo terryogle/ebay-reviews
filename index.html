@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthyLine Outlet — Verified eBay Reviews Widget</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --brand: #3b626b;
+      --brand-dark: #29464d;
+      --brand-tint: #e8f1ef;
+      --border: #dbe7e5;
+      --text: #161e24;
+      --muted: #5d676e;
+      --bg: #ffffff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+    .hlo-topbar {
+      background: var(--brand);
+      color: #fff;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 9px 16px;
+      letter-spacing: 0.02em;
+    }
+    .hlo-nav {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      border-bottom: 1px solid #edf3f2;
+    }
+    .hlo-logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--brand);
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .hlo-logo span {
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--brand-tint);
+      color: var(--brand-dark);
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .toggle-embed-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: #f8fbfb;
+      color: var(--brand-dark);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 600;
+      padding: 8px 15px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .toggle-embed-btn:hover,
+    .toggle-embed-btn.active {
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #fff;
+    }
+
+    .page-shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+
+    .studio-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
+      padding: 14px 18px;
+      background: #f7fbfa;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    .mode-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .mode-tab {
+      appearance: none;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 15px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .mode-tab:hover {
+      color: var(--brand);
+      background: #eef6f4;
+    }
+    .mode-tab.active {
+      background: #ffffff;
+      color: var(--brand-dark);
+      border-color: var(--border);
+      box-shadow: 0 2px 8px rgba(18, 22, 28, 0.05);
+    }
+    .studio-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ---- One-line embed bar ---- */
+    .oneline-bar {
+      background: linear-gradient(135deg, #28454c 0%, #3b626b 55%, #4d7f89 100%);
+      border-radius: 16px;
+      padding: 20px 22px;
+      color: #eaf3f2;
+      margin-bottom: 24px;
+    }
+    .oneline-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .oneline-head strong {
+      font-size: 14.5px;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+    .oneline-head span {
+      font-size: 12px;
+      color: #b9d3d1;
+    }
+    .oneline-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .oneline-code {
+      flex: 1 1 420px;
+      min-width: 0;
+      background: #10222a;
+      border: 1px solid #34555e;
+      color: #9fe3c8;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .gh-input {
+      background: #10222a;
+      border: 1px solid #34555e;
+      color: #fff;
+      font-family: ui-monospace, monospace;
+      font-size: 12px;
+      padding: 10px 12px;
+      border-radius: 9px;
+      width: 190px;
+      outline: none;
+    }
+    .gh-input:focus { border-color: #74a69f; }
+    .copy-btn {
+      appearance: none;
+      border: none;
+      background: #ffffff;
+      color: var(--brand-dark);
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+      white-space: nowrap;
+    }
+    .copy-btn:hover { transform: translateY(-1px); }
+    .oneline-hint {
+      margin: 10px 0 0;
+      font-size: 11.5px;
+      color: #a9c6c4;
+      line-height: 1.5;
+    }
+
+    .embed-panel {
+      display: none;
+      margin-bottom: 24px;
+      background: #141d24;
+      color: #e2e8f0;
+      border-radius: 14px;
+      padding: 20px 22px;
+    }
+    .embed-panel.open { display: block; }
+    .embed-panel-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .embed-panel-head strong { font-size: 13.5px; color: #fff; }
+    pre.code-block {
+      margin: 0 0 10px;
+      padding: 14px 16px;
+      background: #0d1419;
+      border: 1px solid #263540;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px;
+      line-height: 1.65;
+      color: #93c5fd;
+      white-space: pre;
+    }
+    .embed-panel p {
+      margin: 0;
+      font-size: 12px;
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin: 12px 0 24px;
+    }
+    .section-heading h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 0 0 6px;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+    .section-heading p {
+      margin: 0;
+      font-size: 14.5px;
+      color: var(--muted);
+    }
+
+    .view-panel { display: none; }
+    .view-panel.active { display: block; }
+
+    .mock-product {
+      max-width: 880px;
+      margin: 16px auto;
+      padding: 28px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 28px;
+      align-items: center;
+      background: #fff;
+    }
+    .mock-product img {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #edf2f1;
+    }
+    .mock-product h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+    }
+    .mock-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--brand);
+      margin-bottom: 14px;
+    }
+    .mock-price del {
+      color: #94a3b8;
+      font-weight: 400;
+      font-size: 15px;
+      margin-right: 8px;
+    }
+    @media (max-width: 720px) {
+      .mock-product { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hlo-topbar">
+    FREE Shipping on Orders Over $1,000 &bull; Genuine Open-Box &amp; Pre-Owned HealthyLine Mats
+  </div>
+
+  <header class="hlo-nav">
+    <a class="hlo-logo" href="https://healthylineoutlet.com" target="_blank" rel="noopener">
+      HealthyLine Outlet <span>Live Widget Preview</span>
+    </a>
+    <div class="nav-actions">
+      <button type="button" class="toggle-embed-btn" id="toggleEmbedBtn">
+        &lt;/&gt; Advanced Options
+      </button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+
+    <!-- ======= ONE-LINE UNIVERSAL EMBED (main CTA) ======= -->
+    <section class="oneline-bar">
+      <div class="oneline-head">
+        <strong>1 line of code &rarr; reviews slider on any page</strong>
+        <span>WordPress / Elementor / Shopify / Tilda / Webflow / plain HTML</span>
+      </div>
+      <div class="oneline-row">
+        <code class="oneline-code" id="oneLineCode">&lt;script src="https://YOUR_GITHUB_LOGIN.github.io/hlo-ebay-reviews/widget.js" defer&gt;&lt;/script&gt;</code>
+        <input class="gh-input" id="ghUserInput" type="text" placeholder="your-github-username" value="" aria-label="GitHub username" />
+        <button type="button" class="copy-btn" id="copyOneLineBtn">Copy code</button>
+      </div>
+      <p class="oneline-hint">
+        Вставь свой GitHub-логин &rarr; код обновится &rarr; скопируй и вставь в HTML-блок Elementor (или любой сайт).
+        Контейнер создаётся автоматически. Дополнительные режимы &mdash; в &laquo;Advanced Options&raquo;.
+      </p>
+    </section>
+
+    <div class="studio-bar">
+      <div class="mode-tabs" role="tablist">
+        <button type="button" class="mode-tab active" data-view="carousel" data-snippet="carousel">
+          2. Homepage Slider (Carousel)
+        </button>
+        <button type="button" class="mode-tab" data-view="showcase" data-snippet="showcase">
+          1. Full Reviews Showcase
+        </button>
+        <button type="button" class="mode-tab" data-view="badge" data-snippet="badge">
+          3. Product Page Trust Badge
+        </button>
+      </div>
+      <span class="studio-note">Shadow DOM isolated &bull; auto-synced via GitHub Actions</span>
+    </div>
+
+    <div class="embed-panel" id="embedPanel">
+      <div class="embed-panel-head">
+        <strong>Advanced: explicit container + layout options</strong>
+        <button type="button" class="copy-btn" id="copyCodeBtn" style="background:#3b626b;color:#fff;">Copy HTML</button>
+      </div>
+      <pre class="code-block" id="snippetBox"></pre>
+      <p>
+        Все параметры: <code>data-layout="carousel|showcase|badge"</code>, <code>data-limit="12"</code>,
+        <code>data-theme="tinted|light"</code>, <code>data-autoplay="false"</code>,
+        <code>data-product="auto"</code> (подставляет модель со страницы товара), <code>data-seo="false"</code>.
+        То же самое можно передать через URL: <code>widget.js?layout=badge&amp;theme=light</code>.
+      </p>
+    </div>
+
+    <!-- VIEW: Homepage Carousel (DEFAULT) -->
+    <section class="view-panel active" id="view-carousel">
+      <div class="section-heading">
+        <h1>What Our Customers Say on eBay</h1>
+        <p>100% Positive feedback &bull; 1,077+ verified seller reviews &bull; Top-Rated Seller since 2013</p>
+      </div>
+      <div class="hlo-ebay-reviews" data-layout="carousel"></div>
+    </section>
+
+    <!-- VIEW: Full Showcase -->
+    <section class="view-panel" id="view-showcase">
+      <div class="section-heading">
+        <h1>Full Reviews Showcase</h1>
+        <p>Grid with live search, topic filters and full seller replies &mdash; ideal for a dedicated reviews page.</p>
+      </div>
+      <div class="hlo-ebay-reviews" data-layout="showcase" data-limit="9"></div>
+    </section>
+
+    <!-- VIEW: Product Page Trust Badge -->
+    <section class="view-panel" id="view-badge">
+      <div class="section-heading">
+        <h1>WooCommerce Product Page Placement</h1>
+        <p>Compact trust badge under the &laquo;Add to Cart&raquo; button &mdash; click opens the full verified reviews drawer.</p>
+      </div>
+      <div class="mock-product">
+        <img src="https://healthylineoutlet.com/wp-content/uploads/2026/08/Tourmaline-Amethyst-Jade-TAJ-Mat_-Full-7224-Firm-Photon-PEMF-InfraMat-Pro_-12-2-2.21-1.webp" alt="TAJ Mat" onerror="this.style.display='none'"/>
+        <div>
+          <h2>Tourmaline Amethyst Jade (TAJ) Mat™ — Photon PEMF InfraMat Pro®</h2>
+          <div class="mock-price"><del>$1,299.00</del> $649.50</div>
+          <p style="font-size:13.5px;color:#5d676e;margin:0 0 18px;">
+            Inspected open-box &amp; lightly used units backed by our 30-day replacement warranty and lifetime HealthyLine trade-in eligibility.
+          </p>
+          <div class="hlo-ebay-reviews" data-layout="badge" data-product="taj-mat"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="./widget.js" defer></script>
+  <script>
+    (function () {
+      const isGithubPages = window.location.hostname.endsWith(".github.io");
+      const ghUserInput = document.getElementById("ghUserInput");
+      const oneLineCode = document.getElementById("oneLineCode");
+      const copyOneLineBtn = document.getElementById("copyOneLineBtn");
+      const snippetBox = document.getElementById("snippetBox");
+      const copyBtn = document.getElementById("copyCodeBtn");
+
+      // On the deployed GitHub Pages version we know our own URL automatically
+      if (isGithubPages) {
+        const selfUrl =
+          window.location.origin +
+          window.location.pathname.replace(/\/index\.html$/, "").replace(/\/$/, "") +
+          "/widget.js";
+        oneLineCode.textContent = '<script src="' + selfUrl + '" defer><\/script>';
+        if (ghUserInput) {
+          ghUserInput.value = window.location.hostname.split(".")[0];
+        }
+      }
+
+      function getScriptUrl() {
+        if (isGithubPages) {
+          return (
+            window.location.origin +
+            window.location.pathname.replace(/\/index\.html$/, "").replace(/\/$/, "") +
+            "/widget.js"
+          );
+        }
+        const user = ((ghUserInput && ghUserInput.value) || "YOUR_GITHUB_LOGIN").trim();
+        return `https://${user}.github.io/hlo-ebay-reviews/widget.js`;
+      }
+
+      function updateOneLine() {
+        if (isGithubPages) return;
+        oneLineCode.textContent = '<script src="' + getScriptUrl() + '" defer><\/script>';
+      }
+
+      let currentMode = "carousel";
+      function getCurrentSnippet() {
+        const scriptUrl = getScriptUrl();
+        const snippets = {
+          carousel: `<div class="hlo-ebay-reviews" data-layout="carousel" data-theme="tinted"></div>\n<script src="${scriptUrl}" defer><\/script>`,
+          showcase: `<div class="hlo-ebay-reviews" data-layout="showcase" data-limit="9"></div>\n<script src="${scriptUrl}" defer><\/script>`,
+          badge: `<div class="hlo-ebay-reviews" data-layout="badge" data-product="auto"></div>\n<script src="${scriptUrl}" defer><\/script>`
+        };
+        return snippets[currentMode];
+      }
+      function updateSnippet() {
+        snippetBox.textContent = getCurrentSnippet();
+      }
+      updateSnippet();
+
+      if (ghUserInput) {
+        ghUserInput.addEventListener("input", () => {
+          updateOneLine();
+          updateSnippet();
+        });
+      }
+
+      function flashCopied(btn) {
+        const original = btn.textContent;
+        btn.textContent = "Copied!";
+        setTimeout(() => (btn.textContent = original), 1800);
+      }
+
+      copyOneLineBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(oneLineCode.textContent).then(() => flashCopied(copyOneLineBtn));
+      });
+
+      copyBtn.addEventListener("click", () => {
+        navigator.clipboard.writeText(getCurrentSnippet()).then(() => flashCopied(copyBtn));
+      });
+
+      document.getElementById("toggleEmbedBtn").addEventListener("click", (e) => {
+        document.getElementById("embedPanel").classList.toggle("open");
+        e.currentTarget.classList.toggle("active");
+      });
+
+      document.querySelectorAll(".mode-tab").forEach((tab) => {
+        tab.addEventListener("click", () => {
+          document.querySelectorAll(".mode-tab").forEach((t) => t.classList.remove("active"));
+          document.querySelectorAll(".view-panel").forEach((p) => p.classList.remove("active"));
+          tab.classList.add("active");
+          currentMode = tab.getAttribute("data-view");
+          document.getElementById("view-" + currentMode).classList.add("active");
+          updateSnippet();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

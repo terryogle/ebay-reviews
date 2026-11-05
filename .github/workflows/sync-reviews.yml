@@ -1,0 +1,43 @@
+name: Sync eBay Reviews
+
+on:
+  schedule:
+    # Runs automatically every day at 06:00 UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch: # Allows manual 1-click sync from GitHub Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Sync HealthyLine Outlet eBay feedback
+        env:
+          EBAY_SELLER_USERNAME: "healthylineoutlet"
+          EBAY_OAUTH_TOKEN: ${{ secrets.EBAY_OAUTH_TOKEN }}
+          EBAY_CLIENT_ID: ${{ secrets.EBAY_CLIENT_ID }}
+          EBAY_CLIENT_SECRET: ${{ secrets.EBAY_CLIENT_SECRET }}
+          EBAY_REFRESH_TOKEN: ${{ secrets.EBAY_REFRESH_TOKEN }}
+        run: python3 scripts/sync_ebay.py
+
+      - name: Commit & push updated reviews.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet data/reviews.json; then
+            git add data/reviews.json
+            git commit -m "chore(reviews): auto-sync latest eBay feedback"
+            git push
+          else
+            echo "No new changes in data/reviews.json"
+          fi
